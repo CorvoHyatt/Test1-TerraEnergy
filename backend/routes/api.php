@@ -3,6 +3,10 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\TestController;
+
+// Ruta de prueba
+Route::get('test', [TestController::class, 'test']);
 
 // Rutas públicas
 Route::post('login', [AuthController::class, 'login']);

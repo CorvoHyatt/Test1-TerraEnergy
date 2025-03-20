@@ -1,6 +1,6 @@
 FROM php:8.2-fpm
 
-# Instalar dependencias
+# Instalar dependencias y Nginx
 RUN apt-get update && apt-get install -y \
     git \
     curl \
@@ -8,7 +8,8 @@ RUN apt-get update && apt-get install -y \
     libonig-dev \
     libxml2-dev \
     zip \
-    unzip
+    unzip \
+    nginx
 
 # Limpiar cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
@@ -22,6 +23,9 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Establecer directorio de trabajo
 WORKDIR /var/www/html
 
+# Copiar configuración de Nginx
+COPY nginx.conf /etc/nginx/sites-available/default
+
 # Copiar archivos de la aplicación
 COPY . .
 
@@ -34,5 +38,9 @@ RUN php artisan key:generate
 # Permisos de almacenamiento
 RUN chmod -R 777 storage bootstrap/cache
 
+# Script de inicio
+COPY start.sh /start.sh
+RUN chmod +x /start.sh
+
 EXPOSE 8000
-CMD ["php", "artisan", "serve", "--host=0.0.0.0"]
+CMD ["/start.sh"]
