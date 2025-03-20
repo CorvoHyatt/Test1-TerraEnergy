@@ -16,6 +16,20 @@ services:
       - DB_USERNAME=root
       - DB_PASSWORD=root
 
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - VITE_API_URL=http://localhost:8000/api
+    depends_on:
+      - backend
+
   db:
     image: mysql:8.0
     ports:
