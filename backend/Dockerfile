@@ -38,9 +38,8 @@ RUN php artisan key:generate
 # Permisos de almacenamiento
 RUN chmod -R 777 storage bootstrap/cache
 
-# Script de inicio
-COPY start.sh /start.sh
-RUN chmod +x /start.sh
+# Asegurar que start.sh tenga permisos de ejecución
+RUN chmod +x start.sh
 
 EXPOSE 8000
-CMD ["/start.sh"]
+CMD ["./start.sh"]
